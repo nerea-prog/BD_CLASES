@@ -177,4 +177,118 @@ BEGIN
 END;
 /
 
+-- // Borrar dades
+
+CREATE OR REPLACE PROCEDURE baja_persona(p_id integer)
+IS
+BEGIN
+    if existe_persona(p_id) = 1 then
+        consulta_persona(p_id);
+        delete from persona where id = pd_id;
+    else
+        dbms_output.put_line('Error no existeix aquest codi')
+    end if;
+END;
+/
+
+-- Actualitzar dades
+
+CREATE OR REPLACE PROCEDURE modifica__sou(p_id integer, p_sou float)
+IS
+BEGIN
+    if existe_persona(p_id) = 1 then
+        if (p_sou>=1200) then
+            update persona
+            set sou = p_sou
+            where id = pd_id;
+            dbms_output.put_line('Persona actualitzada');
+            consulta_persona(p_id);
+        else
+            dbms_output.put_line('Error: El sou ha de ser de 1200 o més')
+        end if;
+    else
+        dbms_output.put_line('La persona no existeix');
+    end if;
+END;
+/
+
+-- Polimorfisme, afegir una persona amb id automatica
+
+CREATE OR REPLACE PROCEDURE alta_persona(p_nom varchar2, p_sou float)
+IS
+    aux integer;
+BEGIN
+    select max(id)+1 into aux from persona;
+    aux:=aux+1;
+        if (p_nom IS NOT NULL) then
+            if (p_sou >= 1200) then
+                insert into persona values (p_nom, p_sou);
+                dbms_output.put_line('S''ha donat d''alta a la persona');
+            else
+                dbms_output.put_line('Error: El sou ha de ser de 1200 o més');
+            end if;
+        else
+            dbms_output.put_line('Error: El nom es obligatori');
+        end if;
+END;
+/
+
 -- //
+CREATE OR REPLACE PROCEDURE consulta_persona(
+                                p_id integer
+                            )
+
+IS
+    personita persona%rowtype;
+    aux := existe_persona(p_id)
+BEGIN
+    select count(*) into aux from persona where id_p=id
+    if (aux > 0) then
+        select id, nom, sou
+        into personita
+        from personita
+        where id = p_id
+        dbms_output.put_line('************************')
+        dbms_output.put_line('******* PERSONA ********')
+        dbms_output.put_line('ID: ' || personita.id)
+        dbms_output.put_line('Nom: ' || personita.nom)
+        dbms_output.put_line('Sou: ' || personita.sou)
+    else
+        dbms_output.put_line('Error')
+END;
+/
+    
+-- Excepciones
+
+CREATE OR REPLACE PROCEDURE dividir(x integer, y integer)
+IS
+    aux float;
+BEGIN
+    aux:=x/y;
+    dbms_output.put_line('El resultat es: ' || aux);
+EXCEPTION
+    when zero_divide then
+        dbms_output.put_line('Error no es pot dividir per 0');
+END;
+/
+
+-- //
+CREATE OR REPLACE PROCEDURE consulta_persona(
+                                p_id integer
+                            )
+
+IS
+    personita persona%rowtype;
+    aux := existe_persona(p_id)
+BEGIN
+        select id, nom, sou
+        into personita
+        from personita
+        where id = p_id
+        dbms_output.put_line('************************')
+        dbms_output.put_line('******* PERSONA ********')
+        dbms_output.put_line('ID: ' || personita.id)
+        dbms_output.put_line('Nom: ' || personita.nom)
+        dbms_output.put_line('Sou: ' || personita.sou)
+END;
+/
