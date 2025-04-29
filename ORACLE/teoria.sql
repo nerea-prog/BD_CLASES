@@ -254,7 +254,8 @@ BEGIN
         dbms_output.put_line('Nom: ' || personita.nom)
         dbms_output.put_line('Sou: ' || personita.sou)
     else
-        dbms_output.put_line('Error')
+        dbms_output.put_line('Error');
+    end if;
 END;
 /
     

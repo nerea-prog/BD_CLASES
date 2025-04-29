@@ -42,3 +42,84 @@ BEGIN
     END LOOP;
 END;
 
+
+-- 20. 
+CREATE OR REPLACE PROCEDURE fitxa_pokemon(p_numero int)
+IS
+    p_numero_pokedex INT;
+    p_nombre VARCHAR2(30);
+    p_peso FLOAT;
+    p_altura FLOAT;
+    contador INT;
+BEGIN
+    select count(*)
+    into contador
+    from pokemon
+    where numero_pokedex = p_numero;
+    IF contador > 0 THEN
+        IF p_numero > 0 THEN
+            select numero_pokedex, nombre, peso, altura
+            into p_numero_pokedex, p_nombre, p_peso, p_altura
+            from pokemon
+            where numero_pokedex = p_numero;
+            DBMS_OUTPUT.PUT_LINE('--- FITXA DEL POKEMON ---');
+            DBMS_OUTPUT.PUT_LINE('Número Pokédex: ' || p_numero_pokedex);
+            DBMS_OUTPUT.PUT_LINE('Nombre: ' || p_nombre);
+            DBMS_OUTPUT.PUT_LINE('Peso: ' || p_peso || ' kg');
+            DBMS_OUTPUT.PUT_LINE('Altura: ' || p_altura || ' cm');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('El pokemon no existe');
+        END IF;
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('No hay pokemons');
+    END IF;
+END;
+/
+
+-- 21.
+CREATE OR REPLACE PROCEDURE fitxa_pokemon(p_numero int)
+IS
+    p_numero_pokedex INT;
+    p_nombre VARCHAR2(30);
+    p_peso FLOAT;
+    p_altura FLOAT;
+    eb_ps int;
+    eb_numero_pokedex int;
+    eb_ataque int;
+    eb_defensa int;
+    eb_especial int;
+    eb_velocidad int;
+    contador INT;
+BEGIN
+    select count(*)
+    into contador
+    from pokemon
+    where numero_pokedex = p_numero;
+    IF contador > 0 THEN
+        IF p_numero > 0 THEN
+            select p.numero_pokedex, p.nombre, p.peso, p.altura,
+            eb.numero_pokedex, eb.ps, eb.ataque, eb.defensa, eb.especial, eb.velocidad
+            into p_numero_pokedex, p_nombre, p_peso, p_altura,
+            eb_numero_pokedex, eb_ps, eb_ataque, eb_defensa, eb_especial, eb_velocidad
+            from pokemon p
+            join estadisticas_base eb on  p.numero_pokedex = eb.numero_pokedex
+            where p.numero_pokedex = p_numero;
+            DBMS_OUTPUT.PUT_LINE('--- FITXA DEL POKEMON ---');
+            DBMS_OUTPUT.PUT_LINE('Número Pokédex: ' || p_numero_pokedex);
+            DBMS_OUTPUT.PUT_LINE('Nombre: ' || p_nombre);
+            DBMS_OUTPUT.PUT_LINE('Peso: ' || p_peso || ' kg');
+            DBMS_OUTPUT.PUT_LINE('Altura: ' || p_altura || ' cm');
+            DBMS_OUTPUT.PUT_LINE('Ps: ' || eb_ps);
+            DBMS_OUTPUT.PUT_LINE('Ataque: ' || eb_ataque);
+            DBMS_OUTPUT.PUT_LINE('Defensa: ' || eb_defensa);
+            DBMS_OUTPUT.PUT_LINE('Especial: ' || eb_especial);
+            DBMS_OUTPUT.PUT_LINE('Velocidad: ' || eb_velocidad);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('El pokemon no existe');
+        END IF;
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('No hay pokemons');
+    END IF;
+END;
+/
+
