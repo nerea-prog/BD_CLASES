@@ -293,3 +293,32 @@ BEGIN
         dbms_output.put_line('Sou: ' || personita.sou)
 END;
 /
+
+
+-- Cursor. Primeros pasos, forma ampliada
+CREATE or REPLACE procedure llista_pokemon IS
+    cursor cursocito is select * from pokemon;
+    aux cursocito%rowtype;
+begin
+    cursocito.open
+    LOOP
+        fetch cursocito into aux;
+        exit when cursocito%NOTFOUND;
+        dbms_output.put_line(aux.nom);
+        dbms_output.put_line(aux.sou);
+    end LOOP;
+    cursocito.close
+end;
+/
+
+-- Cursor. Forma simplificada
+
+CREATE or REPLACE procedure llista_pokemon IS
+    cursor cursorcito is select * from pokemon;
+begin
+    for aux in cursorcito LOOP
+        dbms_output.put_line(aux.numero_pokedex);
+        dbms_output.put_line(aux.nombre);
+    end LOOP;
+end;
+/
